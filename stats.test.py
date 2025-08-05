@@ -22,6 +22,7 @@ class StatsTest(unittest.TestCase):
     # Use nan and isnan in https://docs.python.org/3/library/math.html
 
   def test_avg_ignore_nan_inputs(self):
+    #check removal of nan
     computedStats = statistics.calculateStats([1.5, float('nan'), 3.2, 4.5])
     epsilon = 0.001
     self.assertAlmostEqual(computedStats["avg"], 3.067, delta=epsilon)
@@ -29,10 +30,27 @@ class StatsTest(unittest.TestCase):
     self.assertAlmostEqual(computedStats["min"], 1.5, delta=epsilon)
 
   def test_all_values_nan(self):
+    #check all nan
     computedStats = statistics.calculateStats([float('nan'),float('nan')])
     self.assertTrue(math.isnan(computedStats["avg"]))
     self.assertTrue(math.isnan(computedStats["max"]))
     self.assertTrue(math.isnan(computedStats["min"]))
+
+  def test_absurd_inputs(self):
+    #absurd inputs to be removed
+    computedStats = statistics.calculateStats([1e10, -1, 9.2, 1e5])
+    epsilon = 0.001
+    self.assertAlmostEqual(computedStats["avg"], 9.2, delta=epsilon)
+    self.assertAlmostEqual(computedStats["max"], 9.2, delta=epsilon)
+    self.assertAlmostEqual(computedStats["min"], 9.2, delta=epsilon)
+
+  def test_absurd_inputs_1(self):
+    #absurd inputs to be removed
+    computedStats = statistics.calculateStats([1e10, 8, 9.2, 1e5, -11])
+    epsilon = 0.001
+    self.assertAlmostEqual(computedStats["avg"], 8.6, delta=epsilon)
+    self.assertAlmostEqual(computedStats["max"], 9.2, delta=epsilon)
+    self.assertAlmostEqual(computedStats["min"], 8, delta=epsilon)
 
 if __name__ == "__main__":
   unittest.main()
