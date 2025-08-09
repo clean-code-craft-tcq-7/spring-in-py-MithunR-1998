@@ -8,9 +8,13 @@ def remove_absurd_value(numbers):
 
 def calculateStats(numbers):
   Stats = {}
-  numbers_wihout_nan = [num for num in numbers if not math.isnan(num)]
+  #remove nan and text inputs
+  numbers_wihout_nan = [num for num in numbers if isinstance(num, (int, float)) and not math.isnan(num)]
+
+  #limit to numbers (int or float) in range [0 to 200]
   final_list_no_absurd = []
   final_list_no_absurd = remove_absurd_value(numbers_wihout_nan)
+  
   if final_list_no_absurd:
     Stats["avg"] = sum(final_list_no_absurd)/len(final_list_no_absurd)
     Stats["max"] = max(final_list_no_absurd)
